@@ -1,9 +1,7 @@
-##My first step is to simply remove the 3' adapter sequence and filter so that the resulting reads are at least
-##20nts long. All of the "nohup" terminology that you'll see here and throughout is to just store the run-time
-##output into a file. These output files are the ones that say essentially how many reads the adapter was found
-##in/removed from, which in this case I know is like 99.5% of the reads for each of the different lanes.
+# Start here to use cutadapt to trim and process fastq files
+My first step is to simply remove the 3' adapter sequence and filter so that the resulting reads are at least 20nts long. All of the "nohup" terminology that you'll see here and throughout is to just store the run-time output into a file. These output files are the ones that say essentially how many reads the adapter was found in/removed from, which in this case I know is like 99.5% of the reads for each of the different lanes.
  
-##This is an example, and I do this for each of the 8 lanes of data that we initially received.
+### This is an example, and I do this for each of the 8 lanes of data that we initially received.
 nohup cutadapt -a AGATCGGAAGAGCACACGTCTGAACTCCAGTCAC -m 20 -o ribo1.trimmed.fastq.gz AM-ribo_S1_L001_R1_001.fastq.gz &> nohup.ribo1.out&
 
 ##Next I'm demultiplexing each "lane" fastq file into the subsequent "samples" based on the barcode sequences (read from 
