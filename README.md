@@ -123,6 +123,7 @@ The final analysis of the ribosome profiling data pipeline uses information stor
     Step through the code contained in `ribo_prof_analysis.ipynb`. 
 
 2. Meta-gene analysis
+
     This is to look at the (potential) pile-up of reads at 5' and 3' ends of annotated genes. Step through the code in `meta_gene_analysis.ipynb`
 
 ## fin.
