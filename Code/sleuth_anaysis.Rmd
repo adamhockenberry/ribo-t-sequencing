@@ -1,0 +1,92 @@
+---
+title: "sleuth_analysis"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+Basic and fairly rapid Sleuth analysis. Not an R coder so getting in and out as fast as possible
+
+```{r lrt}
+library("sleuth")
+setwd('/Users/adamhockenberry/Projects/Pre_2017/MankinLab_V2/Data/Kallisto_output/')
+sample_id <- c("WTrep1.rna.k17", "WTrep2.rna.k17", "RIBOTrep1.rna.k17", "RIBOTrep2.rna.k17")
+#sample_id <- c("WTrep1.rna.k17_nooverhang_nobias", "WTrep2.rna.k17_nooverhang_nobias", "RIBOTrep1.rna.k17_nooverhang_nobias", "RIBOTrep2.rna.k17_nooverhang_nobias")
+sample_id
+
+kal_dirs <- file.path(".", sample_id)
+kal_dirs
+
+s2c <- read.table(file.path(".", "expt_design.txt"), header = TRUE, stringsAsFactors=FALSE)
+s2c
+
+s2c <- dplyr::mutate(s2c, path = kal_dirs)
+s2c
+
+so <- sleuth_prep(s2c, extra_bootstrap_summary = TRUE, read_bootstrap_tpm = TRUE, num_cores=1)
+so <- sleuth_fit(so, ~condition, 'full')
+so <- sleuth_fit(so, ~1, 'reduced')
+so <- sleuth_lrt(so, 'reduced', 'full')
+models(so)
+
+
+sleuth_table <- sleuth_results(so, 'reduced:full', 'lrt', show_all = FALSE)
+write.table(sleuth_table, './sleuth_rna_lrt.tsv', sep='\t')
+
+kallisto_table <- kallisto_table(so)
+write.table(kallisto_table, './kallisto_rna.tsv', sep='\t')
+
+#sleuth_live_settings(test_type = "lrt")
+#sleuth_live(so)
+
+```
+
+## Including Plots
+
+Looking at plots
+
+```{r plotting, echo=FALSE}
+plot_bootstrap(so, "b3471_yhhQ", units = 'est_counts', color_by = "condition")
+plot_bootstrap(so, "b1779_gapA", units = 'tpm', color_by = "condition")
+
+
+```
+
+
+## Wald Test version of the same analysis
+```{r waldtest}
+library("sleuth")
+setwd('/Users/adamhockenberry/Projects/Pre_2017/MankinLab_V2/Data/Kallisto_output/')
+sample_id <- c("WTrep1.rna.k17", "WTrep2.rna.k17", "RIBOTrep1.rna.k17", "RIBOTrep2.rna.k17")
+sample_id
+kal_dirs <- file.path(".", sample_id)
+kal_dirs
+
+s2c <- read.table(file.path(".", "expt_design.txt"), header = TRUE, stringsAsFactors=FALSE)
+s2c
+s2c <- dplyr::mutate(s2c, path = kal_dirs)
+s2c
+
+so <- sleuth_prep(s2c, extra_bootstrap_summary = TRUE, read_bootstrap_tpm = TRUE, num_cores=1)
+
+so <- sleuth_fit(so, ~condition, 'full')
+
+so <- sleuth_wt(so, which_beta='conditionWT', which_model='full')
+
+models(so)
+
+
+sleuth_table <- sleuth_results(so, 'conditionWT', 'wt', show_all = FALSE)
+write.table(sleuth_table, './sleuth_rna_wald.tsv', sep='\t')
+
+#sleuth_significant <- dplyr::filter(sleuth_table, qval <= 0.01)
+#head(sleuth_significant, 20)
+#dim(sleuth_significant)
+#sleuth_live_settings(test_type = "wt")
+#sleuth_live(so)
+
+```

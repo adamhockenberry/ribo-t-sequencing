@@ -2,7 +2,7 @@
 
 This repository contains code used to analyze sequencing reads starting from `.fastq.gz` files (not contained in this repository owing to size constraints). Link to SRA will be added when deposited. Aside from these initial reads and some genome files (can be added), this repository should be sufficient to re-create the entire analysis. As you'll see, the code requires many packages/programs to be installed so be aware of that constraint. It also assumes a certain file structure and after running certain lines below I also clean things up and push files around so the file paths shouldn't be taken too seriously and altered accordingly. 
 
-## Start here to use cutadapt to trim and process fastq files
+## Processing original files. Start here.
 My first step is to simply remove the 3' adapter sequence and filter so that the resulting reads are at least 20nts long. All of the "nohup" terminology that you'll see here and throughout is to just store the run-time output into a file. These output files are the ones that say essentially how many reads the adapter was found in/removed from, which in this case I know is like 99.5% of the reads for each of the different lanes.
  
 ### This is an example, and I do this for each of the 8 lanes of data that we initially received.
@@ -16,7 +16,7 @@ As before, I also impose a resulting length threshold (here 15 nts) as well as s
 nohup cutadapt -m 15 -a file:../barcodes.fasta -o {name}.ribo1.fastq.gz ribo1.trimmed.fastq.gz &> nohup.demultiplex.ribo1.out&
 ```
 
-### Now i want to put all the samples together from their constitutent lane files.
+### Now I want to put all the samples together from their constitutent lane files.
 In this example, since "RIBOTrep1" reads were found in each of the 4 "ribo" lanes, I have 4 fastq.gz files that I concatenate together into one. And of course repeat this process for all samples
 ```
 cat RIBOTrep1.ribo1.fastq.gz RIBOTrep1.ribo2.fastq.gz RIBOTrep1.ribo3.fastq.gz RIBOTrep1.ribo4.fastq.gz > RIBOTrep1.ribo.fastq.gz
@@ -40,9 +40,9 @@ No output necessary
 nohup cutadapt -u 2 -m 10 -o RIBOTrep1.ribo.final.fastq.gz RIBOTrep1.ribo.clippedV2.fastq.gz &
 ```
 
-# END OF ADAPTER CUTTING PROTOCOL.
+With that, the cutadapt protocol is finally finished.
 
-# On to read mapping
+## On to read mapping
 
 ### HISAT2 index building. 
 Note that I move some files around afterwars to put these guys in different folders that should be clear below
@@ -91,5 +91,40 @@ Ultimately, .SAM files will/should probably be deleted because they're enormous 
 python sam_to_wig.py ../WTrep1.rna.sam
 ```
 
-##Downstream analyses and code decriptions can be found in another location. Also in another location are the instructions for RNA-seq
-##analysis using Kallisto/Sleuth as opposed to HISAT2/HTSEQ
+## RNA-seq analysis with Kallisto and Sleuth
+So the entire previous analysis is mostly for dealing with the ribosome profiling data, but in order to do so I also repeated the whole analysis for RNA-seq as well. For significance testing of RNA-seq, however, I will not use the `.wig` files or even the `.sam` or `.bam` files. Rather, for mapping reads I use Kallisto and for significance testing of the output I use Sleuth. Realistically, I didn't even need to do many of the adapter trimming steps to use Kallisto (and I found that more reads could be mapped if I used pre-trimmed reads) but to be straightforward I used the `.fastq.gz` files at the very end of the cutadapt pipeline.
+
+First, I needed to get a `transcripts` file to build the Kallisto index file. I do this using:
+```
+python genome_to_transcriptome.py
+```
+
+It's worth noting that in place of actual "transcripts", this file contains start to stop codons for all annotated CDSs subject to a few minor constraints outlined in the `.py` file.
+
+### Building the Kallisto index
+I experimented with a few different "k" values, but the reads here are pretty short so I opted to go all the way down to 17 because 21 didn't seem to make much of a difference. 
+```
+kallisto index -i ../Data/Genome_files/KALLISTO_indices/U00096.3.k17.transcripts.index -k 17 ../Data/Genome_files/U00096.3.transcripts.fasta
+```
+
+### Running Kallisto
+I just ran all of these at once using the `KALLISTO_all.sh` file. Everything should be straightforward in there including the relevant parameters
+
+### Running Sleuth to test for differential expression
+For this part of the analysis, you'll have to enter the `R` world. Specifically, `sleuth_analysis.Rmd`. Step through all that code and it should save some files
+
+### Back into python for final processing
+Stepping through `rna_seq_analysis.ipynb` should be sufficient to read the sleuth outputs and do the final steps of the RNA-seq analysis pipeline.
+
+## Ribosome profiling specific analyses
+The final analysis of the ribosome profiling data pipeline uses information stored in the previously generated `.wig` files. Of particular note there are 2 main steps.
+### Differential translation efficiency analysis
+Step through the code contained in `ribo_prof_analysis.ipynb`. 
+
+### Meta-gene analysis
+This is to look at the (potential) pile-up of reads at 5 and 3 prime end of annotated genes. Step through the code in `meta_gene_analysis.ipynb`
+
+
+
+
+
