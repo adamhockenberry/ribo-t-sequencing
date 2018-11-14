@@ -1,0 +1,88 @@
+nohup: ignoring input
+This is cutadapt 1.18 with Python 3.6.5
+Command line parameters: -m 15 -a file:../barcodes.fasta -o {name}.rna3.fastq.gz rna3.trimmed.fastq.gz
+Processing reads on 1 core in single-end mode ...
+Finished in 644.06 s (22 us/read; 2.73 M reads/minute).
+
+=== Summary ===
+
+Total reads processed:              29,353,293
+Reads with adapters:                28,469,168 (97.0%)
+Reads that were too short:                   0 (0.0%)
+Reads written (passing filters):    29,353,293 (100.0%)
+
+Total basepairs processed: 1,188,107,490 bp
+Total written (filtered):  1,045,761,650 bp (88.0%)
+
+=== Adapter WTrep1 ===
+
+Sequence: ATCGT; Type: anchored 3'; Length: 5; Trimmed: 7625774 times.
+
+No. of allowed errors:
+0-5 bp: 0
+
+Bases preceding removed adapters:
+  A: 23.5%
+  C: 21.4%
+  G: 26.0%
+  T: 29.2%
+  none/other: 0.0%
+
+Overview of removed sequences
+length	count	expect	max.err	error counts
+5	7625774	28665.3	0	7625774
+
+=== Adapter WTrep2 ===
+
+Sequence: AGCTA; Type: anchored 3'; Length: 5; Trimmed: 7342390 times.
+
+No. of allowed errors:
+0-5 bp: 0
+
+Bases preceding removed adapters:
+  A: 21.5%
+  C: 24.5%
+  G: 25.9%
+  T: 28.1%
+  none/other: 0.0%
+
+Overview of removed sequences
+length	count	expect	max.err	error counts
+5	7342390	28665.3	0	7342390
+
+=== Adapter RIBOTrep1 ===
+
+Sequence: CGTAA; Type: anchored 3'; Length: 5; Trimmed: 7956632 times.
+
+No. of allowed errors:
+0-5 bp: 0
+
+Bases preceding removed adapters:
+  A: 23.0%
+  C: 20.4%
+  G: 24.4%
+  T: 32.3%
+  none/other: 0.0%
+
+Overview of removed sequences
+length	count	expect	max.err	error counts
+5	7956632	28665.3	0	7956632
+
+=== Adapter RIBOTrep2 ===
+
+Sequence: CTAGA; Type: anchored 3'; Length: 5; Trimmed: 5544372 times.
+
+No. of allowed errors:
+0-5 bp: 0
+
+Bases preceding removed adapters:
+  A: 23.5%
+  C: 20.0%
+  G: 23.3%
+  T: 33.2%
+  none/other: 0.0%
+
+Overview of removed sequences
+length	count	expect	max.err	error counts
+5	5544372	28665.3	0	5544372
+

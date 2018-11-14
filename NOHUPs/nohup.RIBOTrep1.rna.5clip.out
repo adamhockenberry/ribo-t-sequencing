@@ -1,0 +1,55 @@
+nohup: ignoring input
+This is cutadapt 1.18 with Python 3.6.5
+Command line parameters: -g XACACTCTTTCCCTACACGACGCTCTTCCGATCT -m 10 -o RIBOTrep1.rna.clippedV2.fastq.gz RIBOTrep1.rna.clipped.fastq.gz
+Processing reads on 1 core in single-end mode ...
+Finished in 374.82 s (12 us/read; 5.05 M reads/minute).
+
+=== Summary ===
+
+Total reads processed:              31,566,411
+Reads with adapters:                 1,930,112 (6.1%)
+Reads that were too short:               1,151 (0.0%)
+Reads written (passing filters):    31,565,260 (100.0%)
+
+Total basepairs processed:   958,359,400 bp
+Total written (filtered):    952,359,087 bp (99.4%)
+
+=== Adapter 1 ===
+
+Sequence: ACACTCTTTCCCTACACGACGCTCTTCCGATCT; Type: non-internal 5'; Length: 33; Trimmed: 1930112 times.
+
+No. of allowed errors:
+0-9 bp: 0; 10-19 bp: 1; 20-29 bp: 2; 30-33 bp: 3
+
+Overview of removed sequences
+length	count	expect	max.err	error counts
+3	1761411	493225.2	0	1761411
+4	163657	123306.3	0	163657
+5	1004	30826.6	0	1004
+6	29	7706.6	0	29
+7	320	1926.7	0	320
+8	275	481.7	0	275
+9	337	120.4	0	46 291
+10	1447	30.1	1	20 1427
+11	457	7.5	1	22 435
+12	160	1.9	1	11 149
+13	35	0.5	1	4 31
+14	34	0.1	1	0 34
+15	38	0.0	1	3 35
+16	38	0.0	1	2 36
+17	38	0.0	1	0 38
+18	45	0.0	1	3 42
+19	49	0.0	1	1 47 1
+20	113	0.0	2	9 71 33
+21	137	0.0	2	2 91 44
+22	80	0.0	2	9 51 20
+23	59	0.0	2	9 26 24
+24	109	0.0	2	13 50 46
+25	109	0.0	2	16 55 38
+26	69	0.0	2	11 28 30
+27	32	0.0	2	2 11 18 1
+28	12	0.0	2	0 10 2
+29	6	0.0	2	0 3 3
+30	9	0.0	3	0 6 2 1
+31	3	0.0	3	0 0 3
+
